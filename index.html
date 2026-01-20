@@ -1,9 +1,368 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <title>Il mio sito</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio di Younesse Eddassouli - Studente CS e Software Engineer">
+    <title>Younesse Eddassouli | Software Engineer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. VARIABILI & CONFIGURAZIONE --- */
+        :root {
+            --bg-dark: #0a0a0a;
+            --accent: #00dc82; /* Un verde "Tech" vibrante, simile a Vue o matrix */
+            --accent-glow: rgba(0, 220, 130, 0.4);
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            
+            /* Glassmorphism Settings */
+            --glass-bg: rgba(25, 25, 25, 0.6);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(12px);
+            --card-radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            /* Sfondo sfumato sottile per dare profondità */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 220, 130, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08), transparent 25%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- 2. TIPOGRAFIA --- */
+        h1, h2, h3 {
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Linea decorativa accanto ai titoli */
+        h2::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background: rgba(255,255,255,0.1);
+        }
+
+        p { color: var(--text-muted); font-size: 1.1rem; }
+        
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.9em; }
+        .accent { color: var(--accent); }
+
+        /* --- 3. LAYOUT --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s forwards;
+        }
+
+        /* --- 4. NAVIGATION (Minimalista in alto) --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            margin-bottom: 60px;
+        }
+
+        .logo { font-weight: 700; font-size: 1.2rem; }
+        
+        .social-icons { display: flex; gap: 20px; }
+        .social-icons a:hover { color: var(--accent); transform: translateY(-2px); }
+
+        /* --- 5. HERO SECTION --- */
+        .hero {
+            padding-top: 40px;
+            text-align: left;
+        }
+
+        .tagline {
+            display: inline-block;
+            background: rgba(0, 220, 130, 0.1);
+            color: var(--accent);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 220, 130, 0.2);
+        }
+
+        .location {
+            margin-top: 20px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .location span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* --- 6. GLASS CARDS (Il cuore del design) --- */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        /* Effetto "Glow" all'hover */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            opacity: 0.5;
+        }
+
+        /* --- 7. LISTS & SKILLS --- */
+        ul.tech-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .tech-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tech-item strong { color: var(--text-main); margin-bottom: 5px; }
+        .tech-item span { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* Tags per i progetti */
+        .tags {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: var(--text-muted);
+        }
+
+        /* --- 8. BUTTONS --- */
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: var(--text-main);
+            color: var(--bg-dark);
+            font-weight: 700;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            transform: scale(1.02);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-left: 10px;
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--text-main);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            font-size: 0.8rem;
+            color: #52525b;
+        }
+
+        /* ANIMAZIONI */
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        section:nth-child(2) { animation-delay: 0.1s; }
+        section:nth-child(3) { animation-delay: 0.2s; }
+        section:nth-child(4) { animation-delay: 0.3s; }
+        section:nth-child(5) { animation-delay: 0.4s; }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .btn { width: 100%; text-align: center; margin-left: 0; margin-top: 10px; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Ciao Mondo! Il mio sito su GitHub funziona.</h1>
+
+    <div class="container">
+        <nav>
+            <div class="logo mono">yeddaTech_</div>
+            <div class="social-icons">
+                <a href="https://github.com/yeddaTech" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/younesse-eddassouli-158032293/" target="_blank">LinkedIn</a>
+            </div>
+        </nav>
+    
+        <section class="hero">
+            <div class="tagline mono">Available for Hire</div>
+            <h1>Younesse<br>Eddassouli</h1>
+            <p style="max-width: 600px; margin-top: 15px;">
+                Studente di Informatica e Software Engineer specializzato in <span class="accent">sistemi backend</span> e programmazione low-level. Costruisco soluzioni scalabili e pulite.
+            </p>
+            <div class="location mono">
+                <span></span> Milano ➔ Zurigo 🇨🇭
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <a href="mailto:esyoun70@gmail.com" class="btn">Contattami</a>
+                <a href="#progetti" class="btn btn-outline">Vedi Progetti</a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Stack Tecnologico</h2>
+            <div class="card">
+                <ul class="tech-list">
+                    <li class="tech-item">
+                        <strong>Core Languages</strong>
+                        <span class="mono">Go, C, Java, Assembly</span>
+                    </li>
+                    <li class="tech-item">
+                        <strong>Web Technologies</strong>
+                        <span class="mono">HTML5, CSS3, PHP, JS</span>
+                    </li>
+                    <li class="tech-item">
+                        <strong>Frameworks</strong>
+                        <span class="mono">Flutter, Gin (Go), Spring</span>
+                    </li>
+                    <li class="tech-item">
+                        <strong>Tools</strong>
+                        <span class="mono">Git, Linux, Docker, VS Code</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Formazione</h2>
+            <div class="card">
+                <h3 style="margin-bottom: 5px;">Università degli Studi di Milano</h3>
+                <p class="accent mono" style="font-size: 0.9rem;">Laurea Triennale in Informatica</p>
+                <p style="margin-top: 10px; font-size: 0.95rem;">
+                    Focus su algoritmi, strutture dati, sistemi operativi e architetture di rete.
+                </p>
+            </div>
+            <div class="card" style="margin-top: 20px;">
+                <h3 style="margin-bottom: 5px;">Liceo Galvani</h3>
+                <p class="mono" style="font-size: 0.9rem; color: #666;">Diploma Scienze Applicate</p>
+            </div>
+        </section>
+
+        <section id="progetti">
+            <h2>Progetti Selezionati</h2>
+            
+            <div class="card" style="margin-bottom: 20px;">
+                <h3>yeddaTech Portfolio</h3>
+                <p style="margin-top: 10px;">
+                    Il sito che stai guardando. Design minimalista "Glassmorphism" ottimizzato per le prestazioni e la leggibilità.
+                </p>
+                <div class="tags">
+                    <span class="tag">HTML/CSS</span>
+                    <span class="tag">Design System</span>
+                </div>
+                <div style="margin-top: 20px;">
+                    <a href="#" class="mono" style="border-bottom: 1px solid var(--accent);">Vedi Codice ↗</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Song Lyrics Searcher</h3>
+                <p style="margin-top: 10px;">
+                    Applicazione per la ricerca rapida di testi musicali tramite API esterne.
+                </p>
+                <div class="tags">
+                    <span class="tag">API REST</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">Frontend</span>
+                </div>
+                <div style="margin-top: 20px;">
+                    <a href="lyrics.html" class="mono" style="border-bottom: 1px solid var(--accent);">Live Demo ↗</a>
+                </div>
+            </div>
+
+        </section>
+
+        <footer>
+            <p class="mono">Designed & Built by yeddaTech</p>
+            <p style="opacity: 0.5; margin-top: 5px;">&copy; 2026 Younesse Eddassouli</p>
+        </footer>
+    </div>
+
 </body>
 </html>
